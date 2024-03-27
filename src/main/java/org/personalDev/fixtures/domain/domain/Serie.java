@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.personalDev.fixtures.Fixture;
+import org.personalDev.fixtures.domain.Fixture;
 import org.personalDev.fixtures.domain.Season;
 
 import jakarta.persistence.*;

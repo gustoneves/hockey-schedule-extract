@@ -1,6 +1,6 @@
 package org.personalDev.fixtures.service;
 
-import org.personalDev.fixtures.Fixture;
+import org.personalDev.fixtures.domain.Fixture;
 
 import java.util.List;
 

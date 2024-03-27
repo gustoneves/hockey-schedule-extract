@@ -1,4 +1,4 @@
-package org.personalDev.fixtures;
+package org.personalDev.fixtures.resource;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -8,6 +8,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.personalDev.fixtures.domain.Fixture;
 import org.personalDev.fixtures.service.AssociationEnum;
 import org.personalDev.fixtures.service.AssociationStrategy;
 import org.personalDev.fixtures.external.GoogleCloudService;

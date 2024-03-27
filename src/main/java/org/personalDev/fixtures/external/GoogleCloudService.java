@@ -25,7 +25,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.faulttolerance.Retry;
-import org.personalDev.fixtures.Fixture;
+import org.personalDev.fixtures.domain.Fixture;
 import org.personalDev.fixtures.domain.TeamColors;
 import org.personalDev.rides.service.RideDTO;
 

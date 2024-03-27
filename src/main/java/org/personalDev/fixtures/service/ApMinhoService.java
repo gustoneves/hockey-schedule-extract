@@ -11,7 +11,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.personalDev.fixtures.external.ApMinhoClient;
-import org.personalDev.fixtures.Fixture;
+import org.personalDev.fixtures.domain.Fixture;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

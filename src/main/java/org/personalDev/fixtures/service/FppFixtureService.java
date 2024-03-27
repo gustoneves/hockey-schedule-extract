@@ -8,7 +8,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.personalDev.fixtures.Fixture;
+import org.personalDev.fixtures.domain.Fixture;
 import org.personalDev.fixtures.external.FppClient;
 
 import java.time.LocalDateTime;

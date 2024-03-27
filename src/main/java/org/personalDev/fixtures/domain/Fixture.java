@@ -1,4 +1,4 @@
-package org.personalDev.fixtures;
+package org.personalDev.fixtures.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
