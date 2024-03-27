@@ -2,10 +2,7 @@ package org.personalDev.fixtures.resource;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.personalDev.fixtures.domain.Fixture;
@@ -20,7 +17,7 @@ import java.util.List;
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/")
-public class GenericFixtureResource {
+public class FixtureResource {
 
     @Inject
     AssociationStrategy associationStrategy;
@@ -44,11 +41,16 @@ public class GenericFixtureResource {
     @GET
     @Path("{association}/season/{season}/championship/{championship}/csv")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getFixturesCSV(@PathParam("association") AssociationEnum association,@PathParam("season") String season, @PathParam("championship") String championship) throws IOException, GeneralSecurityException {
+    public Response getFixturesCSV(@PathParam("association") AssociationEnum association,
+                                   @PathParam("season") String season,
+                                   @PathParam("championship") String championship,
+                                   @QueryParam("sheetRange") String sheetRange
+    ) throws IOException, GeneralSecurityException {
         List<Fixture> matches = associationStrategy.getService(association)
                 .getFixtures(season, championship);
 
-        googleCloudService.printFixturesToSheets(matches);
+        String range = sheetRange != null ? sheetRange :   "Teste!A1:Z1000";
+        googleCloudService.printFixturesToSheets(matches, sheetRange);
         googleCloudService.createCalendarEvents(matches);
 
         return Response.ok(matches).build();

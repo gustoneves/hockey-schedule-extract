@@ -173,14 +173,14 @@ public class GoogleCloudService {
         }
     }
 
-    public void printFixturesToSheets(List<Fixture> fixtures) throws GeneralSecurityException, IOException {
+    public void printFixturesToSheets(List<Fixture> fixtures, String sheetRange) throws GeneralSecurityException, IOException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
         Sheets sheetsService = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName("sports-project-cart")
                 .build();
 
-        String range = "Teste!A1:Z1000";
+
         List<List<Object>> values = fixtures.stream()
                 .map(this::fixtureToStringList)
                 .collect(Collectors.toList());
@@ -189,7 +189,7 @@ public class GoogleCloudService {
 
         sheetsService.spreadsheets()
                 .values()
-                .update(SPREDSHEET_ID, range, valueRange)
+                .update(SPREDSHEET_ID, sheetRange, valueRange)
                 .setValueInputOption("USER_ENTERED")
                 .execute();
     }
