@@ -162,8 +162,8 @@ public class GoogleCloudService {
     }
 
     private static TeamColors getColorId(Fixture fixture) {
-        if(fixture.getSeriesName().contains("15")) {
-            if(fixture.getAwayTeam().equals("H.C. Braga (B)") || fixture.getHomeTeam().equals("H.C. Braga (B)")) {
+        if (fixture.getSeriesName().contains("15")) {
+            if (fixture.getAwayTeam().equals("H.C. Braga (B)") || fixture.getHomeTeam().equals("H.C. Braga (B)")) {
                 return TeamColors.SUB_15_B;
             } else {
                 return TeamColors.SUB_15;
@@ -180,18 +180,25 @@ public class GoogleCloudService {
                 .setApplicationName("sports-project-cart")
                 .build();
 
+        try {
+            List<List<Object>> values = fixtures.stream()
+                    .map(this::fixtureToStringList)
+                    .collect(Collectors.toList());
 
-        List<List<Object>> values = fixtures.stream()
-                .map(this::fixtureToStringList)
-                .collect(Collectors.toList());
+            ValueRange valueRange = new ValueRange().setValues(values);
 
-        ValueRange valueRange = new ValueRange().setValues(values);
+            sheetsService.spreadsheets()
+                    .values()
+                    .update(SPREDSHEET_ID, sheetRange, valueRange)
+                    .setValueInputOption("USER_ENTERED")
+                    .execute();
+        } catch (TokenResponseException e) {
+            //delete token and try again
+            Log.warn("Token expired, deleting token and trying again", e);
+            deleteToken();
+            throw e;
+        }
 
-        sheetsService.spreadsheets()
-                .values()
-                .update(SPREDSHEET_ID, sheetRange, valueRange)
-                .setValueInputOption("USER_ENTERED")
-                .execute();
     }
 
     private List<Object> fixtureToStringList(Fixture fixture) {
@@ -256,7 +263,7 @@ public class GoogleCloudService {
                                     new RowData().setValues(Arrays.asList(new CellData().setUserEnteredValue(
                                                             new ExtendedValue().setStringValue("Total")),
                                                     new CellData().setUserEnteredValue(
-                                                            new ExtendedValue().setFormulaValue("=Sum(B1:B"+rideList.size()+")"))
+                                                            new ExtendedValue().setFormulaValue("=Sum(B1:B" + rideList.size() + ")"))
                                             )
                                     )))
                             .setFields("userEnteredValue.stringValue")
@@ -279,7 +286,7 @@ public class GoogleCloudService {
 
     private void deleteToken() {
         //delete token from dir tokens
-        File file = new File(TOKENS_DIRECTORY_PATH  + "/StoredCredential");
+        File file = new File(TOKENS_DIRECTORY_PATH + "/StoredCredential");
         file.delete();
     }
 
