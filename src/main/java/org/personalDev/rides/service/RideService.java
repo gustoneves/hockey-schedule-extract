@@ -2,7 +2,7 @@ package org.personalDev.rides.service;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.personalDev.GoogleCloudService;
+import org.personalDev.fixtures.external.GoogleCloudService;
 import org.personalDev.rides.entities.Passenger;
 import org.personalDev.rides.entities.PassengerRide;
 import org.personalDev.rides.entities.Ride;
@@ -20,7 +20,6 @@ import jakarta.inject.Inject;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;

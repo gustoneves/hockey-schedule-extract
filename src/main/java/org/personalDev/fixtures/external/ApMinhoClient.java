@@ -1,4 +1,4 @@
-package org.personalDev;
+package org.personalDev.fixtures.external;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 

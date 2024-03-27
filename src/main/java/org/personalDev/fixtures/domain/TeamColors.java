@@ -1,5 +1,8 @@
-package org.personalDev.domain;
+package org.personalDev.fixtures.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum TeamColors{
     SUB_15("11"),
     SUB_15_B("4"),
@@ -11,7 +14,4 @@ public enum TeamColors{
         this.colorId = colorId;
     }
 
-    public String getColorId() {
-        return colorId;
-    }
 }

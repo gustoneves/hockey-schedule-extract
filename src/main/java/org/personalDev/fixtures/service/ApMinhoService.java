@@ -1,95 +1,48 @@
-package org.personalDev;
+package org.personalDev.fixtures.service;
 
 import io.quarkus.logging.Log;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.personalDev.fixtures.external.ApMinhoClient;
+import org.personalDev.fixtures.Fixture;
 
-import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import java.io.*;
-import java.security.GeneralSecurityException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@Path("seasons/{seasonId}/series/{serieId}/")
-public class FixturesResource {
+@ApplicationScoped
+public class ApMinhoService implements AssociationFixtureService{
 
     @Inject
     @RestClient
     ApMinhoClient apMinhoClient;
 
-    @Inject
-    GoogleCloudService calendarService;
-
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getFixturesForSeasonAndSeries(@PathParam("seasonId")String season, @PathParam("serieId")String serieId) throws IOException, GeneralSecurityException {
+    @Override
+    public List<Fixture> getFixtures(@PathParam("seasonId")String season, @PathParam("serieId")String serieId) {
 
         List<List<Fixture>> matches = getFixturesList(season, serieId);
-        return Response.ok(matches).build();
+        return matches.stream().flatMap(List::stream).toList();
     }
 
-    private List<List<Fixture>> getFixturesList(String season, String serieId) throws IOException, GeneralSecurityException {
+    private List<List<Fixture>> getFixturesList(String season, String serieId) {
         List<String> matchDays = numberOfMatchDays(season, serieId);
         String seriesName = getSeriesName(season,serieId);
 
-        List<List<Fixture>> fixtures =IntStream
+        return IntStream
                 .range(0, matchDays.size())
                 .mapToObj(i -> fixtures(matchDays.get(i), i+1, seriesName))
                 .collect(Collectors.toList());
 
-        calendarService.printFixturesToSheets(fixtures);
-        calendarService.createCalendarEvents(fixtures);
-
-        return fixtures;
-
-    }
-
-
-    @Path("csv")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response getFixturesForSeasonAndSeriesHasCSV(@PathParam("seasonId")String season, @PathParam("serieId")String serieId) throws IOException, GeneralSecurityException {
-
-        List<List<Fixture>> matches = getFixturesList(season, serieId);
-        String[] headerList = {"Jornada","Data","Casa", "Golos Casa", "Golos Fora", "Fora"};
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-        CSVFormat format = CSVFormat.DEFAULT.withHeader(headerList);
-        CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);
-
-        var printableList = matches.stream().flatMap(List::stream).toList().stream().map(Fixture::printToList).toList();
-
-        printableList.forEach(it -> {
-            try {
-                csvPrinter.printRecord(it);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-        csvPrinter.flush();
-
-        return Response.ok(new ByteArrayInputStream(out.toByteArray()),MediaType.TEXT_PLAIN).build();
     }
 
     private List<String> numberOfMatchDays(String season, String serie) {
@@ -98,7 +51,7 @@ public class FixturesResource {
 
         String htmlAsString = response.readEntity(String.class);
         Document doc = Jsoup.parse(htmlAsString);
-        Elements links = doc.getElementById("conteudo").select("a");
+        Elements links = Objects.requireNonNull(doc.getElementById("conteudo")).select("a");
 
         int matchDays = links.size() - 1;
 
@@ -154,13 +107,11 @@ public class FixturesResource {
 
     private String getSeriesName(String season, String serie) {
         Response response = apMinhoClient.getSeries("epocas", season, serie);
-        List<String> result = new ArrayList<>();
 
         String htmlAsString = response.readEntity(String.class);
         Document doc = Jsoup.parse(htmlAsString);
-        Elements links = doc.getElementById("conteudo").select("a");
 
-        return doc.getElementById("conteudo").select("h2").text();
+        return Objects.requireNonNull(doc.getElementById("conteudo")).select("h2").text();
     }
 
 }

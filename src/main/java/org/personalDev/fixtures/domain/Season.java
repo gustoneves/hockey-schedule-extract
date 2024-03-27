@@ -1,13 +1,13 @@
-package org.personalDev.domain.domain;
+package org.personalDev.fixtures.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.personalDev.Fixture;
-import org.personalDev.domain.Season;
+import org.personalDev.fixtures.domain.domain.Serie;
 
 import jakarta.persistence.*;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -16,18 +16,15 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Serie {
+public class Season {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private UUID seasonId;
 
     @Column
     private String name;
 
-    @ManyToOne
-    private Season season;
-
     @OneToMany
-    private List<Fixture> fixtures;
+    private List<Serie> series;
 }

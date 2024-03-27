@@ -1,4 +1,4 @@
-package org.personalDev;
+package org.personalDev.fixtures.external;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.auth.oauth2.TokenResponseException;
@@ -25,7 +25,8 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.faulttolerance.Retry;
-import org.personalDev.domain.TeamColors;
+import org.personalDev.fixtures.Fixture;
+import org.personalDev.fixtures.domain.TeamColors;
 import org.personalDev.rides.service.RideDTO;
 
 import java.io.*;
@@ -44,7 +45,7 @@ public class GoogleCloudService {
 
     @Inject
     @ConfigProperty(name = "relevantTeam")
-    String relevantTeam;
+    List<String> relevantTeamNames;
 
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
 
@@ -89,7 +90,7 @@ public class GoogleCloudService {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-    void createCalendarEvents(List<List<Fixture>> fixtures) throws GeneralSecurityException, IOException {
+    public void createCalendarEvents(List<Fixture> fixtures) throws GeneralSecurityException, IOException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
         Calendar calendarService = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
@@ -103,9 +104,7 @@ public class GoogleCloudService {
                 .execute();
 
         List<Fixture> relevantFixtures = fixtures.stream()
-                .flatMap(List::stream) // Flatten the list of lists
-                .filter(fixture -> fixture.getHomeTeam().contains(relevantTeam)
-                        || fixture.getAwayTeam().contains(relevantTeam))
+                .filter(this::isRelevantTeam)
                 .toList();
 
         List<Event> events = relevantFixtures.stream().map(this::convertToEvent).toList();
@@ -121,6 +120,19 @@ public class GoogleCloudService {
         return existingEvents.getItems().stream().anyMatch(e -> e.getSummary().equalsIgnoreCase(event.getSummary()));
     }
 
+    private Boolean isRelevantTeam(Fixture fixture) {
+        //If home Team or away team name is contained in relevantTeamNames
+        Boolean result = false;
+
+        for (String teamName : relevantTeamNames) {
+            if (fixture.getHomeTeam().contains(teamName) || fixture.getAwayTeam().contains(teamName)) {
+                return true;
+            }
+        }
+
+        return result;
+    }
+
     private Event convertToEvent(Fixture fixture) {
         fixture.getDate().format(DATE_FORMATTER);
         String description = "(" + fixture.getSeriesName()
@@ -134,7 +146,6 @@ public class GoogleCloudService {
                 .setSummary(description)
                 .setDescription(description)
                 .setColorId(teamColor.getColorId());
-        String startTime = fixture.getDate().format(DATE_FORMATTER);
 
         Date st = Date.from(fixture.getDate().atZone(ZoneId.systemDefault()).toInstant());
 
@@ -162,7 +173,7 @@ public class GoogleCloudService {
         }
     }
 
-    public void printFixturesToSheets(List<List<Fixture>> fixtures) throws GeneralSecurityException, IOException {
+    public void printFixturesToSheets(List<Fixture> fixtures) throws GeneralSecurityException, IOException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
         Sheets sheetsService = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
@@ -171,7 +182,6 @@ public class GoogleCloudService {
 
         String range = "Teste!A1:Z1000";
         List<List<Object>> values = fixtures.stream()
-                .flatMap(List::stream)
                 .map(this::fixtureToStringList)
                 .collect(Collectors.toList());
 
@@ -180,7 +190,7 @@ public class GoogleCloudService {
         sheetsService.spreadsheets()
                 .values()
                 .update(SPREDSHEET_ID, range, valueRange)
-                .setValueInputOption("RAW")
+                .setValueInputOption("USER_ENTERED")
                 .execute();
     }
 
