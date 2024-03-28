@@ -293,13 +293,9 @@ public class GoogleCloudService {
     private static Integer getSheetIdByName(Spreadsheet spreadsheet, String sheetName) {
         List<Sheet> sheets = spreadsheet.getSheets();
 
-        for (Sheet sheet : sheets) {
-            if (sheet.getProperties().getTitle().equals(sheetName)) {
-                return sheet.getProperties().getSheetId();
-            }
-        }
+        var requestedSheet = sheets.stream().filter( sheet -> sheet.getProperties().getTitle().equals(sheetName)).findFirst();
 
-        return null; // Sheet not found
+        return requestedSheet.map(sheet -> sheet.getProperties().getSheetId()).orElse(null);
     }
 
 }
