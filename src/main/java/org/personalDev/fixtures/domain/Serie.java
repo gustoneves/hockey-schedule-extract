@@ -1,13 +1,11 @@
-package org.personalDev.fixtures.domain.domain;
+package org.personalDev.fixtures.domain;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.personalDev.fixtures.domain.Fixture;
-import org.personalDev.fixtures.domain.Season;
 
-import jakarta.persistence.*;
 import java.util.List;
 import java.util.UUID;
 

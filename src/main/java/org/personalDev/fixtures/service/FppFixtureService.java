@@ -26,11 +26,12 @@ public class FppFixtureService implements AssociationFixtureService {
 
     @Override
     public List<Fixture> getFixtures(String season, String championship) {
-        String seriesName = getChampionshipId(season, championship);
+        Response competition = fppClient.getCompetition(championship);
+        String seriesName = getChampionshipId( championship);
 
         Response response = fppClient.getFixtures(season, championship);
 
-        String htmlAsString = response.readEntity(String.class);
+        String htmlAsString = competition.readEntity(String.class);
         Document doc = Jsoup.parse(htmlAsString);
         Elements elements = doc.select(".titulo-jornada");
 
@@ -58,8 +59,8 @@ public class FppFixtureService implements AssociationFixtureService {
         return fixtures;
     }
 
-    private String getChampionshipId(String season, String championship) {
-        Response response = fppClient.getChampionships(season, championship);
+    private String getChampionshipId(String championship) {
+        Response response = fppClient.getCompetition( championship);
         String htmlAsString = response.readEntity(String.class);
         Document doc = Jsoup.parse(htmlAsString);
         return Objects.requireNonNull(doc.select("h1").first()).text();

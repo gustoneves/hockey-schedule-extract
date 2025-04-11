@@ -1,40 +1,26 @@
-package org.personalDev.fixtures.domain;
+package org.personalDev.fixtures.dto;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.personalDev.fixtures.domain.SeasonStatus;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Cacheable(false)
-public class Season {
+public class SeasonResponse {
 
-    @Id
-    private UUID seasonId;
-
-    @Column
+    private UUID id;
     private String name;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Serie> series;
-
-    @Column
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate startDate;
-
-    @Column
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate endDate;
-
-    @Column
-    @Enumerated(EnumType.STRING)
     private SeasonStatus status;
-
 }

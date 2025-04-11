@@ -6,9 +6,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.personalDev.fixtures.domain.Fixture;
+import org.personalDev.fixtures.external.GoogleCloudService;
 import org.personalDev.fixtures.service.AssociationEnum;
 import org.personalDev.fixtures.service.AssociationStrategy;
-import org.personalDev.fixtures.external.GoogleCloudService;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -50,7 +50,7 @@ public class FixtureResource {
                 .getFixtures(season, championship);
 
         String range = sheetRange != null ? sheetRange :   "Teste!A1:Z1000";
-        googleCloudService.printFixturesToSheets(matches, sheetRange);
+        googleCloudService.printFixturesToSheets(matches, range);
         googleCloudService.createCalendarEvents(matches);
 
         return Response.ok(matches).build();

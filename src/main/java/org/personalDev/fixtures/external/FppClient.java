@@ -7,6 +7,11 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 @RegisterRestClient(configKey = "fpp")
 public interface FppClient {
 
+    @GET
+    @Consumes("application/x-www-form-urlencoded")
+    @Path("Competicao/{competicaoId}")
+    Response getCompetition(@PathParam("competicaoId") String competitionId);
+
     @POST
     @Consumes("application/x-www-form-urlencoded")
     @Path("calendario.php")

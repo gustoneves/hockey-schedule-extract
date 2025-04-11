@@ -4,9 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum TeamColors{
-    SUB_15("11"),
-    SUB_15_B("4"),
-    SUB_17("5");
+    SUB_17("11"),
+    SUB_13("5");
 
     private final String colorId;
 

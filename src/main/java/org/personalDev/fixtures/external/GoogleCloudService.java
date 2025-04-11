@@ -40,8 +40,11 @@ import java.util.stream.Collectors;
 @RequestScoped
 public class GoogleCloudService {
 
-    public static final String SUB_15_CALENDAR_ID = "7i8k2e1c3cihmb807gfnancgt4@group.calendar.google.com";
-    public static final String SPREDSHEET_ID = "1Ib8svjEvLZyPEx5h7NMSXJr1Q5yCI9UzTGQURSn5Z4Q";
+    @ConfigProperty(name = "calendar")
+    String SUB_15_CALENDAR_ID;
+
+    @ConfigProperty(name = "spreedsheet")
+    String SPREEDSHEET_ID;
 
     @Inject
     @ConfigProperty(name = "relevantTeam")
@@ -97,7 +100,7 @@ public class GoogleCloudService {
                 .setApplicationName("sports-project-cart")
                 .build();
 
-        DateTime now = new DateTime(System.currentTimeMillis());
+        DateTime now = new DateTime(Date.from(LocalDateTime.now().minusMonths(6).atZone(ZoneId.systemDefault()).toInstant()));
         Events existingEvents = calendarService.events().list(SUB_15_CALENDAR_ID).setTimeMin(now)
                 .setOrderBy("startTime")
                 .setSingleEvents(true)
@@ -162,14 +165,11 @@ public class GoogleCloudService {
     }
 
     private static TeamColors getColorId(Fixture fixture) {
-        if (fixture.getSeriesName().contains("15")) {
-            if (fixture.getAwayTeam().equals("H.C. Braga (B)") || fixture.getHomeTeam().equals("H.C. Braga (B)")) {
-                return TeamColors.SUB_15_B;
-            } else {
-                return TeamColors.SUB_15;
-            }
-        } else {
+        if (fixture.getSeriesName().contains("17")) {
             return TeamColors.SUB_17;
+
+        } else {
+            return TeamColors.SUB_13;
         }
     }
 
@@ -189,7 +189,7 @@ public class GoogleCloudService {
 
             sheetsService.spreadsheets()
                     .values()
-                    .update(SPREDSHEET_ID, sheetRange, valueRange)
+                    .update(SPREEDSHEET_ID, sheetRange, valueRange)
                     .setValueInputOption("USER_ENTERED")
                     .execute();
         } catch (TokenResponseException e) {
@@ -225,7 +225,7 @@ public class GoogleCloudService {
 
         // Get the spreadsheet
         try {
-            Spreadsheet spreadsheet = sheetsService.spreadsheets().get(SPREDSHEET_ID).execute();
+            Spreadsheet spreadsheet = sheetsService.spreadsheets().get(SPREEDSHEET_ID).execute();
 
             Integer sheetId = getSheetIdByName(spreadsheet, "Viagens");
 
@@ -273,7 +273,7 @@ public class GoogleCloudService {
             BatchUpdateSpreadsheetRequest batchUpdateRequest = new BatchUpdateSpreadsheetRequest().setRequests(requests);
 
             sheetsService.spreadsheets()
-                    .batchUpdate(SPREDSHEET_ID, batchUpdateRequest)
+                    .batchUpdate(SPREEDSHEET_ID, batchUpdateRequest)
                     .execute();
         } catch (TokenResponseException e) {
             //delete token and try again
@@ -293,7 +293,7 @@ public class GoogleCloudService {
     private static Integer getSheetIdByName(Spreadsheet spreadsheet, String sheetName) {
         List<Sheet> sheets = spreadsheet.getSheets();
 
-        var requestedSheet = sheets.stream().filter( sheet -> sheet.getProperties().getTitle().equals(sheetName)).findFirst();
+        var requestedSheet = sheets.stream().filter(sheet -> sheet.getProperties().getTitle().equals(sheetName)).findFirst();
 
         return requestedSheet.map(sheet -> sheet.getProperties().getSheetId()).orElse(null);
     }

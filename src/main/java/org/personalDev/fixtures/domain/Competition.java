@@ -1,40 +1,32 @@
 package org.personalDev.fixtures.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-@Cacheable(false)
-public class Season {
+public class Competition {
 
     @Id
-    private UUID seasonId;
-
-    @Column
+    private UUID id;
     private String name;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Serie> series;
-
-    @Column
     private LocalDate startDate;
-
-    @Column
     private LocalDate endDate;
+    private LocalDate maxBirthDate;
+    private LocalDate minBirthDate;
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    private SeasonStatus status;
 
+    @ManyToOne
+    private Season season;
 }
