@@ -1,0 +1,25 @@
+meta {
+  name: Get Athletes
+  type: http
+  seq: 13
+}
+
+get {
+  url: http://localhost:8080/athletes
+  body: none
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Tomás José Mendes Neves",
+    "jersey": 80,
+    "license": "78183",
+    "birthDate": "2009-01-15",
+    "phone": "+351934819373",
+    "email": "tomasjmendesneves@gmail.com",
+    "parentName": "José Augusto Alves Neves",
+    "parentEmail": "gustoneves@gmail.com",
+    "parentPhone": "+351966888316"
+  }
+}

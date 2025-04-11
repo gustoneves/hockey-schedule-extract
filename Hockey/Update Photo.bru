@@ -1,0 +1,28 @@
+meta {
+  name: Update Photo
+  type: http
+  seq: 15
+}
+
+put {
+  url: http://localhost:8080/athletes/:athlete-id/photo
+  body: multipartForm
+  auth: inherit
+}
+
+params:path {
+  athlete-id: 4623913d-417a-4f3d-a602-254faa35a7ef
+}
+
+headers {
+  Accept: application/octet-stream
+  Content-Type: application/octet-stream
+}
+
+body:multipart-form {
+  : @file(/Users/janeves/Downloads/FED_77594.jpeg)
+}
+
+body:file {
+  file: @file(/Users/janeves/Downloads/FED_77594.jpeg) @contentType(image/jpeg)
+}

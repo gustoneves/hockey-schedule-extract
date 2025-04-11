@@ -1,0 +1,32 @@
+meta {
+  name: Post Ride
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8080/rides
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "date": "2025-04-04",
+    "tripPassengers": [
+      {
+        "name": "Afonso"
+      },
+      {
+        "name": "Rodrigo"
+      },
+      {
+        "name": "Tiago",
+        "roundTrip": false
+      },
+      {
+        "name": "Tomas"
+      }
+    ]
+  }
+}

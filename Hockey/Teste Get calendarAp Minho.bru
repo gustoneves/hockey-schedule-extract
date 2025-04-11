@@ -1,0 +1,20 @@
+meta {
+  name: Teste Get calendarAp Minho
+  type: http
+  seq: 8
+}
+
+get {
+  url: http://localhost:8080/AP_MINHO/season/:season/championship/:competition/csv?sheetRange=Teste!A2:F1000
+  body: none
+  auth: none
+}
+
+params:query {
+  sheetRange: Teste!A2:F1000
+}
+
+params:path {
+  competition: 1822
+  season: 1647
+}

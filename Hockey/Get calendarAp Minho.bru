@@ -1,0 +1,20 @@
+meta {
+  name: Get calendarAp Minho
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8080/AP_MINHO/season/:season/championship/:competition/csv?sheetRange=TE Sub-17!A2:F1000
+  body: none
+  auth: none
+}
+
+params:query {
+  sheetRange: TE Sub-17!A2:F1000
+}
+
+params:path {
+  competition: 1824
+  season: 1647
+}

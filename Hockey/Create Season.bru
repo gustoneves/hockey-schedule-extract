@@ -1,0 +1,19 @@
+meta {
+  name: Create Season
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://localhost:8080/seasons
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Época 2024/25",
+    "startDate": "2024-08-01",
+    "endDate": "2025-07-31"
+  }
+}
