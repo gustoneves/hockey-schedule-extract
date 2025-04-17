@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-fixture-table
+      author: janeves
+      changes:
+        - preConditions:
+            onFail: MARK_RAN
+            not:
+              - tableExists:
+                  tableName: fixture
+        - createTable:
+            tableName: fixture
+            failOnError: false
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: home_team
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: home_goals
+                  type: integer
+                  defaultValue: 0
+              - column:
+                  name: away_team
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: away_goals
+                  type: integer
+                  defaultValue: 0
+              - column:
+                  name: match_day
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: series_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: serie_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_fixture_serie
+                    references: serie(id) 

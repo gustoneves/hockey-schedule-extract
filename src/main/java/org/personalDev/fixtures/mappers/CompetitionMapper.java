@@ -5,14 +5,10 @@ import org.mapstruct.Mapping;
 import org.personalDev.fixtures.domain.Competition;
 import org.personalDev.fixtures.dto.CompetitionResponse;
 
-import java.util.List;
+@Mapper(componentModel = "cdi")
+public interface CompetitionMapper extends BaseMapper<Competition, CompetitionResponse> {
 
-@Mapper(config = MappingConfig.class)
-public interface CompetitionMapper {
-
-    @Mapping(target = "seasonId", source = "season.id")
-    @Mapping(target = "seasonName", source = "season.name")
-    CompetitionResponse toDto(Competition season);
-
-    List<CompetitionResponse> toDto(List<Competition> seasons);
+    @Mapping(target = "teamId", source = "team.id")
+    @Mapping(target = "teamName", source = "team.name")
+    CompetitionResponse toResponse(Competition competition);
 }

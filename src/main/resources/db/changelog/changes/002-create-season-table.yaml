@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-season-table
+      author: janeves
+      changes:
+        - preConditions:
+            onFail: MARK_RAN
+            not:
+              - tableExists:
+                  tableName: season
+        - createTable:
+            tableName: season
+            failOnError: false
+            columns:
+              - column:
+                  name: season_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+                    defaultValue: DRAFT 

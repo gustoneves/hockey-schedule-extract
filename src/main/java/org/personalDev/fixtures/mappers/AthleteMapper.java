@@ -1,61 +1,50 @@
 package org.personalDev.fixtures.mappers;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.personalDev.fixtures.domain.Athlete;
 import org.personalDev.fixtures.dto.AthleteResponse;
 import org.personalDev.fixtures.dto.CreateAthleteRequest;
+import org.personalDev.fixtures.dto.ShortAthleteResponse;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@ApplicationScoped
-public class AthleteMapper {
+@Mapper(config = MappingConfig.class)
+public interface AthleteMapper {
 
-    public AthleteResponse toDto(Athlete athlete) {
-        if (athlete == null) {
-            return null;
-        }
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "jersey", source = "jersey")
+    @Mapping(target = "license", source = "license")
+    @Mapping(target = "birthDate", source = "birthDate")
+    @Mapping(target = "phone", source = "phone")
+    @Mapping(target = "email", source = "email")
+    @Mapping(target = "parentName", source = "parentName")
+    @Mapping(target = "parentEmail", source = "parentEmail")
+    @Mapping(target = "parentPhone", source = "parentPhone")
+    @Mapping(target = "photo", source = "photo")
+    AthleteResponse toDto(Athlete athlete);
 
-        return AthleteResponse.builder()
-                .id(athlete.getId())
-                .name(athlete.getName())
-                .jersey(athlete.getJersey())
-                .license(athlete.getLicense())
-                .birthDate(athlete.getBirthDate())
-                .phone(athlete.getPhone())
-                .email(athlete.getEmail())
-                .parentName(athlete.getParentName())
-                .parentEmail(athlete.getParentEmail())
-                .parentPhone(athlete.getParentPhone())
-                .photo(athlete.getPhoto())
-                .build();
-    }
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "jersey", source = "jersey")
+    @Mapping(target = "license", source = "license")
+    @Mapping(target = "birthDate", source = "birthDate")
+    ShortAthleteResponse toShortDto(Athlete athlete);
 
-    public List<AthleteResponse> toDto(List<Athlete> athletes) {
-        if (athletes == null) {
-            return null;
-        }
 
-        return athletes.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
-    }
+    List<AthleteResponse> toDto(List<Athlete> athletes);
 
-    public Athlete toDomain(CreateAthleteRequest request) {
-        if (request == null) {
-            return null;
-        }
-
-        return Athlete.builder()
-                .name(request.getName())
-                .jersey(request.getJersey())
-                .license(request.getLicense())
-                .birthDate(request.getBirthDate())
-                .phone(request.getPhone())
-                .email(request.getEmail())
-                .parentName(request.getParentName())
-                .parentEmail(request.getParentEmail())
-                .parentPhone(request.getParentPhone())
-                .build();
-    }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "jersey", source = "jersey")
+    @Mapping(target = "license", source = "license")
+    @Mapping(target = "birthDate", source = "birthDate")
+    @Mapping(target = "phone", source = "phone")
+    @Mapping(target = "email", source = "email")
+    @Mapping(target = "parentName", source = "parentName")
+    @Mapping(target = "parentEmail", source = "parentEmail")
+    @Mapping(target = "parentPhone", source = "parentPhone")
+    @Mapping(target = "photo", ignore = true)
+    Athlete toDomain(CreateAthleteRequest request);
 }

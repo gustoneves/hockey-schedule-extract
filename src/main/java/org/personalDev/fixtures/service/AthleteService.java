@@ -10,7 +10,9 @@ import org.personalDev.fixtures.mappers.AthleteMapper;
 import org.personalDev.fixtures.repositories.AthleteRepository;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequestScoped
 public class AthleteService {
@@ -88,5 +90,14 @@ public class AthleteService {
         Athlete updatedAthlete = athleteRepository.findById(id);
         Log.info("Stored photo size: " + (updatedAthlete.getPhoto() != null ? updatedAthlete.getPhoto().length : 0)
                 + " bytes");
+    }
+
+    public Set<Athlete> getAthletesByIds(Set<UUID> athleteIds) {
+        if (athleteIds == null || athleteIds.isEmpty()) {
+            return Set.of();
+        }
+        return athleteRepository.find("id in ?1", athleteIds)
+                .stream()
+                .collect(Collectors.toSet());
     }
 }

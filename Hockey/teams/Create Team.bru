@@ -1,0 +1,20 @@
+meta {
+  name: Create Team
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/teams
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "seasonId": "c9d18a9e-361b-4051-acc0-c599cdaa6743",
+    "name": "Sub-15",
+    "athleteIds": [
+    ]
+  }
+}

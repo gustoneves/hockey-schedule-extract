@@ -25,5 +25,5 @@ public class CreateCompetitionRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate minBirthDate;
 
-    private UUID seasonId;
+    private UUID teamId;
 }

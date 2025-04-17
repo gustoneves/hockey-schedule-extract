@@ -1,22 +1,18 @@
 meta {
-  name: Update Competition
+  name: Create Competition
   type: http
-  seq: 11
+  seq: 2
 }
 
-put {
-  url: http://localhost:8080/competitions/:id
+post {
+  url: http://localhost:8080/competitions
   body: json
   auth: inherit
 }
 
-params:path {
-  id: 63f9ca96-90a5-46c3-8fee-7967442763b6
-}
-
 body:json {
   {
-    "name": "Torneio de Encerramento Sub-17",
+    "name": "Taça do Minho Sub-17",
     "startDate": "2024-08-01",
     "endDate": "2025-07-31",
     "maxBirthDate": "2011-12-31",

@@ -1,0 +1,61 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-athlete-table
+      author: janeves
+      changes:
+        - preConditions:
+            onFail: MARK_RAN
+            not:
+              - tableExists:
+                  tableName: athlete
+        - createTable:
+            tableName: athlete
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: jersey
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: license
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: birth_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: photo
+                  type: bytea
+              - column:
+                  name: phone
+                  type: varchar(255)
+              - column:
+                  name: email
+                  type: varchar(255)
+              - column:
+                  name: parent_name
+                  type: varchar(255)
+              - column:
+                  name: parent_email
+                  type: varchar(255)
+              - column:
+                  name: parent_phone
+                  type: varchar(255)
+              - column:
+                  name: status
+                  type: varchar(20)
+                  defaultValue: ACTIVE 

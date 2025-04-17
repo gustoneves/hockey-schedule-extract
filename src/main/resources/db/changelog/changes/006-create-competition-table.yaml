@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-competition-table
+      author: janeves
+      changes:
+        - preConditions:
+            onFail: MARK_RAN
+            not:
+              - tableExists:
+                  tableName: competition
+        - createTable:
+            tableName: competition
+            failOnError: false
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: max_birth_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: min_birth_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: team_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_competition_team
+                    references: team(id) 

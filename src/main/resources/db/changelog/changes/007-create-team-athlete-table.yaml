@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-team-athlete-table
+      author: janeves
+      changes:
+        - preConditions:
+            onFail: MARK_RAN
+            not:
+              - tableExists:
+                  tableName: team_athlete
+        - createTable:
+            tableName: team_athlete
+            failOnError: false
+            columns:
+              - column:
+                  name: team_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_team_athlete_team
+                    references: team(id)
+              - column:
+                  name: athlete_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_team_athlete_athlete
+                    references: athlete(id) 

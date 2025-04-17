@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-team-table
+      author: janeves
+      changes:
+        - preConditions:
+            onFail: MARK_RAN
+            not:
+              - tableExists:
+                  tableName: team
+        - createTable:
+            tableName: team
+            failOnError: false
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: season_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_team_season
+                    references: season(season_id)
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+                    defaultValue: ACTIVE 

@@ -31,7 +31,9 @@ public class SeasonResource {
     @GET
     @Path("{id}")
     public Response getById(@PathParam("id")UUID id) {
-        var season = seasonMapper.toDto(seasonService.getSeason(id));
+        var season = seasonMapper.toDto(seasonService
+                .getSeason(id)
+                .orElseThrow(() -> new NotFoundException("Season not found")));
         return Response.ok(season).build();
     }
 

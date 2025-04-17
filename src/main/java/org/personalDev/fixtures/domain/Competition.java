@@ -26,7 +26,6 @@ public class Competition {
     private LocalDate maxBirthDate;
     private LocalDate minBirthDate;
 
-
     @ManyToOne
-    private Season season;
+    private Team team;
 }

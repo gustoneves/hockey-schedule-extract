@@ -31,7 +31,7 @@ public class CompetitionResource {
     @GET
     @Path("{id}")
     public Response getById(@PathParam("id") UUID id) {
-        return Response.ok(competitionMapper.toDto(competitionService.getById(id))).build();
+        return Response.ok(competitionMapper.toResponse(competitionService.getById(id))).build();
     }
 
     @POST

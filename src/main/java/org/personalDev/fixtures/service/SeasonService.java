@@ -8,6 +8,7 @@ import org.personalDev.fixtures.dto.CreateSeasonRequest;
 import org.personalDev.fixtures.repositories.SeasonRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RequestScoped
@@ -16,8 +17,8 @@ public class SeasonService {
     @Inject
     SeasonRepository seasonRepository;
 
-    public Season getSeason(UUID seasonId) {
-        return seasonRepository.findById(seasonId);
+    public Optional<Season> getSeason(UUID seasonId) {
+        return seasonRepository.findByIdOptional(seasonId);
     }
 
     public List<Season> listSeasons() {

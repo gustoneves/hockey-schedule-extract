@@ -26,6 +26,6 @@ public class CompetitionResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate minBirthDate;
 
-    private UUID seasonId;
-    private String seasonName;
+    private UUID teamId;
+    private String teamName;
 }

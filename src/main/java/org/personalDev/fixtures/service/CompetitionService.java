@@ -4,7 +4,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 import org.personalDev.fixtures.domain.Competition;
-import org.personalDev.fixtures.domain.Season;
+import org.personalDev.fixtures.domain.Team;
 import org.personalDev.fixtures.dto.CreateCompetitionRequest;
 import org.personalDev.fixtures.repositories.CompetitionRepository;
 
@@ -18,10 +18,10 @@ public class CompetitionService {
     CompetitionRepository competitionRepository;
 
     @Inject
-    SeasonService seasonService;
+    TeamService teamService;
 
     public List<Competition> list(UUID seasonId) {
-        if(seasonId == null)
+        if (seasonId == null)
             return competitionRepository.listAll();
 
         return competitionRepository.find("season.id", seasonId).list();
@@ -32,15 +32,11 @@ public class CompetitionService {
     }
 
     public void createCompetition(CreateCompetitionRequest request) {
-        Season season =  seasonService.getSeason(request.getSeasonId());
-
-        if(season == null) {
-            throw new NotFoundException("Season not found");
-        }
+        Team team = teamService.findTeamById(request.getTeamId());
 
         Competition competition = Competition.builder()
                 .id(UUID.randomUUID())
-                .season(season)
+                .team(team)
                 .name(request.getName())
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
@@ -54,17 +50,13 @@ public class CompetitionService {
     public void updateCompetition(UUID id, CreateCompetitionRequest request) {
         Competition competition = competitionRepository.findById(id);
 
-        if(competition == null) {
+        if (competition == null) {
             throw new NotFoundException("Competition not found");
         }
 
-        Season season =  seasonService.getSeason(request.getSeasonId());
+        Team team = teamService.findTeamById(request.getTeamId());
 
-        if(season == null) {
-            throw new NotFoundException("Season not found");
-        }
-
-        competition.setSeason(season);
+        competition.setTeam(team);
         competition.setName(request.getName());
         competition.setStartDate(request.getStartDate());
         competition.setEndDate(request.getEndDate());
